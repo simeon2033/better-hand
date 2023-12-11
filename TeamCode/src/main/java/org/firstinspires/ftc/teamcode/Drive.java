@@ -47,13 +47,13 @@ public class Drive extends LinearOpMode {
         rechtsAsServo.scaleRange(0, 0.25);
         waitForStart();
         if (opModeIsActive()) {
-            // Put run blocks here.
-            for (int count = 0; count < 1; count++) {
-                linksachter.setPower(0);
-                linksvoor.setPower(0);
-                rechtsvoor.setPower(0);
-                rechtsachter.setPower(0);
-            }
+
+
+            linksachter.setPower(0);
+            linksvoor.setPower(0);
+            rechtsvoor.setPower(0);
+            rechtsachter.setPower(0);
+
             while (opModeIsActive()) {
                 // Put loop blocks here.
                 if (gamepad1.a) {
@@ -69,8 +69,8 @@ public class Drive extends LinearOpMode {
                     }
                 }
                 if (!(gamepad1.left_trigger > 0.1 || gamepad1.right_trigger > 0.1)) {
-                    speed1 = ratio * (gamepad1.left_stick_x * Math.sin(-45 / 180 * Math.PI) - gamepad1.left_stick_y * Math.cos(-45 / 180 * Math.PI));
-                    speed2 = ratio * (gamepad1.left_stick_x * Math.cos(-45 / 180 * Math.PI) + gamepad1.left_stick_y * Math.sin(-45 / 180 * Math.PI));
+                    speed1 = ratio * (gamepad1.left_stick_x * Math.sin(-45) - gamepad1.left_stick_y * Math.cos(-45));
+                    speed2 = ratio * (gamepad1.left_stick_x * Math.cos(-45) + gamepad1.left_stick_y * Math.sin(-45));
                     linksachter.setPower(speed1);
                     rechtsvoor.setPower(speed1 * -1);
                     linksvoor.setPower(speed2);
@@ -86,8 +86,8 @@ public class Drive extends LinearOpMode {
                     rechtsvoor.setPower(speed1);
                     rechtsachter.setPower(speed1);
                 }
-                schouderlinksAsDcMotor.setPower(0.4*gamepad2.left_stick_y);
-                schouderrechtsAsDcMotor.setPower(-0.4*gamepad2.left_stick_y);
+                schouderlinksAsDcMotor.setPower(0.4 * gamepad2.left_stick_y);
+                schouderrechtsAsDcMotor.setPower(-0.4 * gamepad2.left_stick_y);
 
                 armlinksAsDcMotor.setPower(0.5 * gamepad2.right_stick_y);
                 armrechtsAsDcMotor.setPower(-0.5 * gamepad2.right_stick_y);
