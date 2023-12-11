@@ -1,0 +1,100 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+
+@TeleOp(name = "Drive3 (Blocks to Java)")
+public class Drive extends LinearOpMode {
+
+    private Servo linksAsServo;
+    private Servo rechtsAsServo;
+    private DcMotor linksachter;
+    private DcMotor rechtsvoor;
+    private DcMotor linksvoor;
+    private DcMotor rechtsachter;
+    private DcMotor schouderlinksAsDcMotor;
+    private DcMotor schouderrechtsAsDcMotor;
+    private DcMotor armAsDcMotor;
+    private Servo handAsServo;
+
+    /**
+     * This function is executed when this Op Mode is selected from the Driver Station.
+     */
+    @Override
+    public void runOpMode() {
+        double ratio;
+        double speed1;
+        double speed2;
+
+        linksAsServo = hardwareMap.get(Servo.class, "linksAsServo");
+        rechtsAsServo = hardwareMap.get(Servo.class, "rechtsAsServo");
+        linksachter = hardwareMap.get(DcMotor.class, "linksachter");
+        rechtsvoor = hardwareMap.get(DcMotor.class, "rechtsvoor");
+        linksvoor = hardwareMap.get(DcMotor.class, "linksvoor");
+        rechtsachter = hardwareMap.get(DcMotor.class, "rechtsachter");
+        schouderlinksAsDcMotor = hardwareMap.get(DcMotor.class, "schouderlinksAsDcMotor");
+        schouderrechtsAsDcMotor = hardwareMap.get(DcMotor.class, "schouderrechtsAsDcMotor");
+        armAsDcMotor = hardwareMap.get(DcMotor.class, "armAsDcMotor");
+        handAsServo = hardwareMap.get(Servo.class, "handAsServo");
+
+        // Reverse one of the drive motors.
+        ratio = 0.5;
+        linksAsServo.scaleRange(0.3, 0.45);
+        rechtsAsServo.scaleRange(0, 0.25);
+
+        waitForStart();
+        if (opModeIsActive()) {
+            // Put run blocks here.
+            while (opModeIsActive()) {
+                // Put loop blocks here.
+                if (gamepad1.a) {
+                    ratio += -0.01;
+                    if (ratio < 0.05) {
+                        ratio = 0.05;
+                    }
+                }
+                if (gamepad1.b) {
+                    ratio += 0.01;
+                    if (ratio > 1) {
+                        ratio = 1;
+                    }
+                }
+                if (!(gamepad1.left_trigger > 0.1 || gamepad1.right_trigger > 0.1)) {
+                    speed1 = ratio * (gamepad1.left_stick_x * Math.sin(-45 / 180 * Math.PI) - gamepad1.left_stick_y * Math.cos(-45 / 180 * Math.PI));
+                    speed2 = ratio * (gamepad1.left_stick_x * Math.cos(-45 / 180 * Math.PI) + gamepad1.left_stick_y * Math.sin(-45 / 180 * Math.PI));
+                    linksachter.setPower(speed1);
+                    rechtsvoor.setPower(speed1 * -1);
+                    linksvoor.setPower(speed2);
+                    rechtsachter.setPower(speed2 * -1);
+                } else {
+                    if (gamepad1.left_trigger > gamepad1.right_trigger) {
+                        speed1 = -1 * ratio * gamepad1.left_trigger;
+                    } else {
+                        speed1 = ratio * gamepad1.right_trigger;
+                    }
+                    linksachter.setPower(speed1);
+                    linksvoor.setPower(speed1);
+                    rechtsvoor.setPower(speed1);
+                    rechtsachter.setPower(speed1);
+                }
+                if (gamepad2.left_stick_y < 0) {
+                    schouderlinksAsDcMotor.setPower(0.2);
+                    schouderrechtsAsDcMotor.setPower(-0.2);
+                } else if (gamepad2.left_stick_y > 0) {
+                    schouderlinksAsDcMotor.setPower(-0.2);
+                    schouderrechtsAsDcMotor.setPower(0.2);
+                } else {
+                    schouderlinksAsDcMotor.setPower(0);
+                    schouderrechtsAsDcMotor.setPower(0);
+                }
+                armAsDcMotor.setPower(0.5 * gamepad2.right_stick_y);
+                linksAsServo.setPosition(gamepad2.right_trigger * 1);
+                rechtsAsServo.setPosition(Math.abs(gamepad2.right_trigger - 1));
+                handAsServo.setPosition(0.5 * gamepad2.left_trigger);
+                telemetry.update();
+            }
+        }
+    }
+}
