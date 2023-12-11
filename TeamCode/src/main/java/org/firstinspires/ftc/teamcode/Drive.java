@@ -5,22 +5,23 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "Drive3 (Blocks to Java)")
+@TeleOp(name = "drive22 (Blocks to Java)")
 public class Drive extends LinearOpMode {
 
     private Servo linksAsServo;
     private Servo rechtsAsServo;
     private DcMotor linksachter;
-    private DcMotor rechtsvoor;
     private DcMotor linksvoor;
+    private DcMotor rechtsvoor;
     private DcMotor rechtsachter;
     private DcMotor schouderlinksAsDcMotor;
     private DcMotor schouderrechtsAsDcMotor;
-    private DcMotor armAsDcMotor;
+    private DcMotor armrechtsAsDcMotor;
+    private DcMotor armlinksAsDcMotor;
     private Servo handAsServo;
 
     /**
-     * This function is executed when this Op Mode is selected from the Driver Station.
+     * This function is executed when this OpMode is selected from the Driver Station.
      */
     @Override
     public void runOpMode() {
@@ -28,25 +29,31 @@ public class Drive extends LinearOpMode {
         double speed1;
         double speed2;
 
-        linksAsServo = hardwareMap.get(Servo.class, "linksAsServo");
-        rechtsAsServo = hardwareMap.get(Servo.class, "rechtsAsServo");
         linksachter = hardwareMap.get(DcMotor.class, "linksachter");
-        rechtsvoor = hardwareMap.get(DcMotor.class, "rechtsvoor");
         linksvoor = hardwareMap.get(DcMotor.class, "linksvoor");
+        rechtsvoor = hardwareMap.get(DcMotor.class, "rechtsvoor");
         rechtsachter = hardwareMap.get(DcMotor.class, "rechtsachter");
-        schouderlinksAsDcMotor = hardwareMap.get(DcMotor.class, "schouderlinksAsDcMotor");
-        schouderrechtsAsDcMotor = hardwareMap.get(DcMotor.class, "schouderrechtsAsDcMotor");
-        armAsDcMotor = hardwareMap.get(DcMotor.class, "armAsDcMotor");
-        handAsServo = hardwareMap.get(Servo.class, "handAsServo");
+        schouderlinksAsDcMotor = hardwareMap.get(DcMotor.class, "schouder links");
+        schouderrechtsAsDcMotor = hardwareMap.get(DcMotor.class, "schouder rechts");
+        armrechtsAsDcMotor = hardwareMap.get(DcMotor.class, "arm rechts");
+        armlinksAsDcMotor = hardwareMap.get(DcMotor.class, "arm links");
+        handAsServo = hardwareMap.get(Servo.class, "hand");
+        linksAsServo = hardwareMap.get(Servo.class, "links");
+        rechtsAsServo = hardwareMap.get(Servo.class, "rechts");
 
-        // Reverse one of the drive motors.
+        // Put initialization blocks here.
         ratio = 0.5;
         linksAsServo.scaleRange(0.3, 0.45);
         rechtsAsServo.scaleRange(0, 0.25);
-
         waitForStart();
         if (opModeIsActive()) {
             // Put run blocks here.
+            for (int count = 0; count < 1; count++) {
+                linksachter.setPower(0);
+                linksvoor.setPower(0);
+                rechtsvoor.setPower(0);
+                rechtsachter.setPower(0);
+            }
             while (opModeIsActive()) {
                 // Put loop blocks here.
                 if (gamepad1.a) {
@@ -79,17 +86,11 @@ public class Drive extends LinearOpMode {
                     rechtsvoor.setPower(speed1);
                     rechtsachter.setPower(speed1);
                 }
-                if (gamepad2.left_stick_y < 0) {
-                    schouderlinksAsDcMotor.setPower(0.2);
-                    schouderrechtsAsDcMotor.setPower(-0.2);
-                } else if (gamepad2.left_stick_y > 0) {
-                    schouderlinksAsDcMotor.setPower(-0.2);
-                    schouderrechtsAsDcMotor.setPower(0.2);
-                } else {
-                    schouderlinksAsDcMotor.setPower(0);
-                    schouderrechtsAsDcMotor.setPower(0);
-                }
-                armAsDcMotor.setPower(0.5 * gamepad2.right_stick_y);
+                schouderlinksAsDcMotor.setPower(0.4*gamepad2.left_stick_y);
+                schouderrechtsAsDcMotor.setPower(-0.4*gamepad2.left_stick_y);
+
+                armlinksAsDcMotor.setPower(0.5 * gamepad2.right_stick_y);
+                armrechtsAsDcMotor.setPower(-0.5 * gamepad2.right_stick_y);
                 linksAsServo.setPosition(gamepad2.right_trigger * 1);
                 rechtsAsServo.setPosition(Math.abs(gamepad2.right_trigger - 1));
                 handAsServo.setPosition(0.5 * gamepad2.left_trigger);
