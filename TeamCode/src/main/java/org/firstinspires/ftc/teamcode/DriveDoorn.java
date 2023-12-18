@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "drive22 (Blocks to Java)")
-public class Drive extends LinearOpMode {
+@TeleOp(name = "Drive Doorn")
+public class DriveDoorn extends LinearOpMode {
 
     private Servo linksAsServo;
     private Servo rechtsAsServo;
