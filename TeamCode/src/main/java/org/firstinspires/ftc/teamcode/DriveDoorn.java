@@ -43,7 +43,7 @@ public class DriveDoorn extends LinearOpMode {
 
         // Put initialization blocks here.
         ratio = 0.5;
-        linksAsServo.scaleRange(0.3, 0.45);
+        linksAsServo.scaleRange(0.15, 0.4);
         rechtsAsServo.scaleRange(0, 0.25);
         waitForStart();
         if (opModeIsActive()) {
